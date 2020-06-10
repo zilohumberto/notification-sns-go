@@ -1,0 +1,8 @@
+subscribe
+    aws --endpoint-url http://localhost:4100 sns subscribe --topic-arn arn:aws:sns::000000000000:we-are-in-live --protocol push
+list-topics
+    aws --endpoint-url http://localhost:4100 sns list-topics
+publish
+    aws --endpoint-url=http://localhost:4100 sns publish --topic-arn arn:aws:sns:eu-west-2:123450000001:we-are-in-live --message "My first message"
+create-topic
+    aws --endpoint-url http://localhost:4100 sns create-topic --name we-are-in-live

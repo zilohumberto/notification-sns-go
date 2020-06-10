@@ -26,6 +26,6 @@ func main() {
 	sender = sending.NewService()
 	// set up the HTTP server
 	router := rest.Handler(sender)
-	fmt.Println("The beer server is on tap now: http://localhost:8080")
+	fmt.Println("The Notification server is on tap now: http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

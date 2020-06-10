@@ -3,6 +3,7 @@ POST http://local.localhost:8080/push
 Content-Type: application/json
 
 {
-  "id": "999"
+  "topic": "arn:aws:sns::000000000000:we-are-in-live",
+  "message": "Push notification!"
 }
 ###

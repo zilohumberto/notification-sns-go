@@ -24,17 +24,22 @@ func sendPush(s sending.Service) func(w http.ResponseWriter, r *http.Request, _ 
 		var newNotification sending.Notification
 		err := decoder.Decode(&newNotification)
 		if err != nil {
+			log.Println(err)
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 		err = s.SendPush(newNotification)
 		if err != nil{
-			log.Fatal(err)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
 		}
 		w.Header().Set("Content-Type", "application/json")
 		err = json.NewEncoder(w).Encode("Push sent")
 		if err != nil{
-			log.Fatal(err)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
 		}
 	}
 }
