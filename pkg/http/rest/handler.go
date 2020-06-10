@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+// Handler generate all endpoints rest for the service
 func Handler(a sending.Service) http.Handler{
 	router := httprouter.New()
 
@@ -15,6 +16,8 @@ func Handler(a sending.Service) http.Handler{
 	return router
 }
 
+// sendPush function called when the request POST /push was triggered
+// create and send a notification
 func sendPush(s sending.Service) func(w http.ResponseWriter, r *http.Request, _ httprouter.Params){
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		decoder := json.NewDecoder(r.Body)
