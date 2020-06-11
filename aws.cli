@@ -6,3 +6,6 @@ publish
     aws --endpoint-url=http://localhost:4100 sns publish --topic-arn arn:aws:sns:eu-west-2:123450000001:we-are-in-live --message "My first message"
 create-topic
     aws --endpoint-url http://localhost:4100 sns create-topic --name we-are-in-live
+
+create-platform-application
+ aws --endpoint-url http://localhost:4100 sns create-platform-application --name HUBERTEST --platform APNS --attributes PlatformCredential=EXAMPLEabcd12345jklm67890stuv12345bcdef

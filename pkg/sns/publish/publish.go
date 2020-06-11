@@ -8,26 +8,22 @@ import (
 )
 
 // Publish send through sns a notification
-func Publish(msgPtr *string, topicPtr *string) (sns.PublishOutput, error) {
+func Publish(input sns.PublishInput) (sns.PublishOutput, error) {
 	// urlEndpoint is added only for test purpose
-	urlEndpoint := "http://localhost:4100"
+	urlEndpoint := "http://127.0.0.1:4575"
 	// credentials take it from ENVIRONMENT
-	creds := credentials.NewEnvCredentials()
+	_credentials := credentials.NewEnvCredentials()
 	// Initialize a session that the SDK will use to load
 	sess := session.Must(session.NewSessionWithOptions(session.Options{
 		SharedConfigState: session.SharedConfigEnable,
 		Config: aws.Config{
 			Endpoint: &urlEndpoint,
-			Credentials: creds,
+			Credentials: _credentials,
 		},
 	}))
 
 	svc := sns.New(sess)
-
-	result, err := svc.Publish(&sns.PublishInput{
-		Message:  msgPtr,
-		TopicArn: topicPtr,
-	})
+	result, err := svc.Publish(&input)
 	if err != nil {
 		return sns.PublishOutput{}, err
 	}

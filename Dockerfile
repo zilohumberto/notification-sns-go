@@ -1,40 +1,23 @@
-# Build Stage
-FROM lacion/alpine-golang-buildimage:1.13 AS build-stage
+# Dockerfile References: https://docs.docker.com/engine/reference/builder/
 
-LABEL app="build-notification-sns-go"
-LABEL REPO="https://github.com/zilohumberto/notification-sns-go"
+# Start from the latest golang base image
+FROM golang:latest
 
-ENV PROJPATH=/go/src/github.com/zilohumberto/notification-sns-go
+# Set the Current Working Directory inside the container
+WORKDIR /app
+# Copy go mod and sum files
+COPY go.mod go.sum ./
 
-# Because of https://github.com/docker/docker/issues/14914
-ENV PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
+RUN GO111MODULE=on go mod download
 
-ADD . /go/src/github.com/zilohumberto/notification-sns-go
-WORKDIR /go/src/github.com/zilohumberto/notification-sns-go
+# Copy the source from the current directory to the Working Directory inside the container
+COPY . .
 
-RUN make build-alpine
+RUN chmod +x /app
 
-# Final Stage
-FROM lacion/alpine-base-image:latest
+# Build the Go app
+RUN cd /app/cmd/notification-server/ && go build -o main .
 
-ARG GIT_COMMIT
-ARG VERSION
-LABEL REPO="https://github.com/zilohumberto/notification-sns-go"
-LABEL GIT_COMMIT=$GIT_COMMIT
-LABEL VERSION=$VERSION
-
-# Because of https://github.com/docker/docker/issues/14914
-ENV PATH=$PATH:/opt/notification-sns-go/bin
-
-WORKDIR /opt/notification-sns-go/bin
-
-COPY --from=build-stage /go/src/github.com/zilohumberto/notification-sns-go/bin/notification-sns-go /opt/notification-sns-go/bin/
-RUN chmod +x /opt/notification-sns-go/bin/notification-sns-go
-
-# Create appuser
-RUN adduser -D -g '' notification-sns-go
-USER notification-sns-go
-
-ENTRYPOINT ["/usr/bin/dumb-init", "--"]
-
-CMD ["/opt/notification-sns-go/bin/notification-sns-go"]
+# Command to run the executable
+CMD ["./cmd/notification-server/main"]

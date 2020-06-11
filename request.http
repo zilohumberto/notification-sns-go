@@ -1,9 +1,20 @@
 ### Local connection
-POST http://local.localhost:8080/push
+POST http://127.0.0.1:8980/push
 Content-Type: application/json
 
 {
-  "topic": "arn:aws:sns::000000000000:we-are-in-live",
-  "message": "Push notification!"
+  "target": "arn:aws:sns:000000000000:we-are-in-live",
+  "message": "{\"default\": \"we are in live\"}",
+  "subject": "SOME_EVENT"
+}
+###
+### Topic
+POST http://27.0.0.1:8980/topic
+Content-Type: application/json
+
+{
+  "topic": ":000000000000:we-are-in-live",
+  "message": "FACE_DETECTED",
+  "subject": "FACE_DETECTED"
 }
 ###

@@ -13,11 +13,12 @@ func Handler(a sending.Service) http.Handler{
 	router := httprouter.New()
 
 	router.POST("/push", sendPush(a))
+	router.POST("/topic", sendTopic(a))
 	return router
 }
 
 // sendPush function called when the request POST /push was triggered
-// create and send a notification
+// create and send a notification push
 func sendPush(s sending.Service) func(w http.ResponseWriter, r *http.Request, _ httprouter.Params){
 	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		decoder := json.NewDecoder(r.Body)
@@ -36,6 +37,33 @@ func sendPush(s sending.Service) func(w http.ResponseWriter, r *http.Request, _ 
 		}
 		w.Header().Set("Content-Type", "application/json")
 		err = json.NewEncoder(w).Encode("Push sent")
+		if err != nil{
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+	}
+}
+
+// create and send a notification for a topic
+func sendTopic(s sending.Service) func(w http.ResponseWriter, r *http.Request, _ httprouter.Params){
+	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+		decoder := json.NewDecoder(r.Body)
+		var newNotification sending.Notification
+		err := decoder.Decode(&newNotification)
+		if err != nil {
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		err = s.SendTopic(newNotification)
+		if err != nil{
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		err = json.NewEncoder(w).Encode("Topic sent")
 		if err != nil{
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusBadRequest)
