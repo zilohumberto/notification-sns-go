@@ -9,11 +9,11 @@ Content-Type: application/json
 }
 ###
 ### Topic
-POST http://27.0.0.1:8980/topic
+POST http://127.0.0.1:8980/topic
 Content-Type: application/json
 
 {
-  "topic": ":000000000000:we-are-in-live",
+  "topic": "arn:aws:sns:us-east-1:000000000000:we-are-in-live",
   "message": "FACE_DETECTED",
   "subject": "FACE_DETECTED"
 }
