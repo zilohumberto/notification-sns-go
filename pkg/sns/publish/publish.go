@@ -8,7 +8,7 @@ import (
 )
 
 // Publish send through sns a notification
-func Publish(input sns.PublishInput) (sns.PublishOutput, error) {
+func Publish(input sns.PublishInput) (*sns.PublishOutput, error) {
 	// urlEndpoint is added only for test purpose
 	urlEndpoint := "http://127.0.0.1:4575"
 	// credentials take it from ENVIRONMENT
@@ -25,7 +25,7 @@ func Publish(input sns.PublishInput) (sns.PublishOutput, error) {
 	svc := sns.New(sess)
 	result, err := svc.Publish(&input)
 	if err != nil {
-		return sns.PublishOutput{}, err
+		return nil, err
 	}
-	return *result, nil
+	return result, nil
 }
