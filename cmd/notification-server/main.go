@@ -4,10 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/zilohumberto/notification-sns-go/pkg/http/rest"
-	"github.com/zilohumberto/notification-sns-go/pkg/sending"
 	"github.com/zilohumberto/notification-sns-go/version"
-	"log"
-	"net/http"
 )
 
 func main() {
@@ -22,10 +19,6 @@ func main() {
 		fmt.Println("OS / Arch:", version.OsArch)
 		return
 	}
-	var sender sending.Service
-	sender = sending.NewService()
 	// set up the HTTP server
-	router := rest.Handler(sender)
-	fmt.Println("The Notification server is on tap now: http://127.0.0.1:8980")
-	log.Fatal(http.ListenAndServe(":8980", router))
+	rest.Handler()
 }

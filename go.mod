@@ -5,6 +5,7 @@ go 1.14
 require (
 	github.com/aws/aws-sdk-go v1.31.12
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/gin-gonic/gin v1.6.3
 	github.com/golang/protobuf v1.4.2
 	github.com/julienschmidt/httprouter v1.3.0
 	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
